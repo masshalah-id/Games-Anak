@@ -1,0 +1,2959 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Game Mencocokkan Huruf Vokal</title>
+
+<style>
+
+/* =========================================================
+   DASAR
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef5ff,
+            #fff5fa
+        );
+
+    color: #263238;
+}
+
+
+/* =========================================================
+   CONTAINER GAME
+   ========================================================= */
+
+.game {
+    max-width: 1150px;
+    margin: 20px auto;
+    padding: 15px;
+}
+
+
+/* =========================================================
+   LAYAR MULAI
+   ========================================================= */
+
+.start-screen,
+.finish-screen {
+
+    background: white;
+
+    border-radius: 25px;
+
+    padding: 45px 25px;
+
+    text-align: center;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.10);
+}
+
+
+.start-screen h1,
+.finish-screen h1 {
+
+    font-size: 35px;
+
+    color: #34495e;
+
+    margin: 10px 0;
+}
+
+
+.start-icons {
+
+    font-size: 65px;
+
+    margin: 15px;
+}
+
+
+.start-screen p,
+.finish-screen p {
+
+    font-size: 18px;
+
+    line-height: 1.6;
+
+    color: #667085;
+}
+
+
+.start-button,
+.restart-button {
+
+    border: none;
+
+    background: #e84393;
+
+    color: white;
+
+    padding: 15px 30px;
+
+    border-radius: 15px;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    margin-top: 15px;
+}
+
+
+.start-button:hover,
+.restart-button:hover {
+
+    background: #d63384;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 18px 25px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    box-shadow:
+        0 5px 18px rgba(0,0,0,.08);
+
+    margin-bottom: 15px;
+
+}
+
+
+.title {
+
+    font-size: 25px;
+
+    font-weight: bold;
+
+    color: #34495e;
+
+}
+
+
+.info {
+
+    display: flex;
+
+    gap: 25px;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+}
+
+
+.score {
+
+    color: #e67e22;
+
+}
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+.progress-box {
+
+    width: 100%;
+
+    height: 15px;
+
+    background: #ddd;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    margin-bottom: 15px;
+
+}
+
+
+.progress {
+
+    height: 100%;
+
+    width: 0%;
+
+    background: #4caf50;
+
+    transition: width .3s ease;
+
+}
+
+
+/* =========================================================
+   CONTOH PASANGAN
+   ========================================================= */
+
+.example {
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 18px;
+
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.07);
+
+}
+
+
+.example-title {
+
+    text-align: center;
+
+    font-size: 21px;
+
+    font-weight: bold;
+
+    margin-bottom: 15px;
+
+    color: #34495e;
+
+}
+
+
+.example-list {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.example-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    background: #f7f8fa;
+
+    padding: 7px 12px;
+
+    border-radius: 12px;
+
+    font-size: 21px;
+
+    font-weight: bold;
+
+}
+
+
+.example-shape {
+
+    width: 42px;
+
+    height: 42px;
+
+}
+
+
+/* =========================================================
+   INSTRUKSI
+   ========================================================= */
+
+.instruction {
+
+    text-align: center;
+
+    background: #fff3cd;
+
+    border: 2px solid #ffe08a;
+
+    padding: 15px;
+
+    border-radius: 15px;
+
+    font-size: 21px;
+
+    font-weight: bold;
+
+    margin-bottom: 10px;
+
+}
+
+
+/* =========================================================
+   FEEDBACK
+   ========================================================= */
+
+.feedback {
+
+    text-align: center;
+
+    min-height: 45px;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    padding: 8px;
+
+}
+
+
+.correct {
+
+    color: #27ae60;
+
+}
+
+
+.wrong {
+
+    color: #e74c3c;
+
+}
+
+
+/* =========================================================
+   DUA PANEL
+   ========================================================= */
+
+.columns {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+
+}
+
+
+.panel {
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 18px;
+
+    box-shadow:
+        0 5px 18px rgba(0,0,0,.08);
+
+}
+
+
+.panel-title {
+
+    text-align: center;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    margin-bottom: 15px;
+
+    color: #34495e;
+
+}
+
+
+/* =========================================================
+   GRID BANGUN & HURUF
+   ========================================================= */
+
+.shape-grid,
+.letter-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(80px, 1fr)
+        );
+
+    gap: 10px;
+
+}
+
+
+/* =========================================================
+   TOMBOL BANGUN
+   ========================================================= */
+
+.shape-button {
+
+    min-height: 90px;
+
+    border: 3px solid #ddd;
+
+    background: white;
+
+    border-radius: 15px;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.shape-button:hover {
+
+    transform: scale(1.04);
+
+    background: #f7fbff;
+
+}
+
+
+.shape-button.selected {
+
+    border-color: #3498db;
+
+    background: #eaf5ff;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(52,152,219,.15);
+
+}
+
+
+.shape-button.matched {
+
+    opacity: .22;
+
+    cursor: default;
+
+    border-color: #2ecc71;
+
+}
+
+
+.shape-button svg {
+
+    width: 65px;
+
+    height: 65px;
+
+}
+
+
+/* =========================================================
+   TOMBOL HURUF
+   ========================================================= */
+
+.letter-button {
+
+    min-height: 90px;
+
+    border: 3px solid #ddd;
+
+    background: white;
+
+    border-radius: 15px;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 43px;
+
+    font-weight: bold;
+
+    color: #263238;
+
+}
+
+
+.letter-button:hover {
+
+    transform: scale(1.04);
+
+    background: #f7fbff;
+
+}
+
+
+.letter-button.selected {
+
+    border-color: #3498db;
+
+    background: #eaf5ff;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(52,152,219,.15);
+
+}
+
+
+.letter-button.matched {
+
+    opacity: .22;
+
+    cursor: default;
+
+    border-color: #2ecc71;
+
+}
+
+
+/* =========================================================
+   TOMBOL LANJUT
+   ========================================================= */
+
+.next-area {
+
+    text-align: center;
+
+    margin-top: 20px;
+
+}
+
+
+.next {
+
+    background: #3498db;
+
+    color: white;
+
+    border: none;
+
+    padding: 14px 28px;
+
+    border-radius: 13px;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.next:hover {
+
+    background: #2980b9;
+
+}
+
+
+/* =========================================================
+   HASIL AKHIR
+   ========================================================= */
+
+.final-score {
+
+    font-size: 52px;
+
+    font-weight: bold;
+
+    color: #e67e22;
+
+    margin: 15px;
+
+}
+
+
+.stars {
+
+    font-size: 42px;
+
+    margin: 15px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE HP
+   ========================================================= */
+
+@media(max-width:750px) {
+
+    .columns {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .header {
+
+        flex-direction: column;
+
+        gap: 10px;
+
+        text-align: center;
+
+    }
+
+
+    .info {
+
+        gap: 15px;
+
+    }
+
+
+    .shape-grid,
+    .letter-grid {
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+    }
+
+
+    .shape-button,
+    .letter-button {
+
+        min-height: 75px;
+
+    }
+
+
+    .shape-button svg {
+
+        width: 50px;
+
+        height: 50px;
+
+    }
+
+
+    .letter-button {
+
+        font-size: 35px;
+
+    }
+
+}
+
+
+@media(max-width:450px) {
+
+    .shape-grid,
+    .letter-grid {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+    }
+
+
+    .instruction {
+
+        font-size: 17px;
+
+    }
+
+
+    .example-item {
+
+        font-size: 17px;
+
+    }
+
+}
+/* =========================================================
+   TOMBOL KEMBALI KE HOME
+   ========================================================= */
+
+.home-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    margin-bottom: 15px;
+    padding: 11px 20px;
+
+    background: linear-gradient(135deg, #ff6b6b, #ff9f43);
+    color: white;
+
+    border: none;
+    border-radius: 14px;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    text-decoration: none;
+    cursor: pointer;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    transition: .2s;
+}
+
+.home-button:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 16px rgba(0,0,0,.20);
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="game">
+
+<a href="index.html" class="home-button">
+    🏠 Kembali ke Home
+</a>
+
+<!-- =====================================================
+     LAYAR MULAI
+     ===================================================== -->
+
+<div
+    id="startScreen"
+    class="start-screen"
+>
+
+    <div class="start-icons">
+
+        🔴 🔷 ❤️ 🔵 🔺
+
+    </div>
+
+
+    <h1>
+        🎮 Mencocokkan Huruf Vokal
+    </h1>
+
+
+    <p>
+        Perhatikan contoh pasangan
+        <b>huruf dan bentuk</b>.
+    </p>
+
+
+    <p>
+        Kemudian pilih
+        <b>BANGUN</b>
+        dan
+        <b>HURUF</b>
+        yang sesuai.
+    </p>
+
+
+    <p>
+
+        ⭐ 10 Level
+
+        &nbsp; | &nbsp;
+
+        🎯 Skor
+
+        &nbsp; | &nbsp;
+
+        👏 Suara Benar
+
+        &nbsp; | &nbsp;
+
+        🔔 Suara Salah
+
+    </p>
+
+
+    <button
+        class="start-button"
+        onclick="startGame()"
+    >
+
+        ▶ MULAI BERMAIN
+
+    </button>
+
+</div>
+
+
+
+<!-- =====================================================
+     LAYAR GAME
+     ===================================================== -->
+
+<div
+    id="gameScreen"
+    style="display:none;"
+>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div class="title">
+
+        🔤 Game Huruf Vokal
+
+    </div>
+
+
+    <div class="info">
+
+        <div>
+
+            Level:
+
+            <span id="level">
+                1
+            </span>
+
+            /10
+
+        </div>
+
+
+        <div class="score">
+
+            ⭐
+
+            <span id="score">
+                0
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- PROGRESS -->
+
+<div class="progress-box">
+
+    <div
+        id="progress"
+        class="progress"
+    ></div>
+
+</div>
+
+
+
+<!-- =====================================================
+     CONTOH PASANGAN
+     ===================================================== -->
+
+<div class="example">
+
+
+<div class="example-title">
+
+    📚 CONTOH PASANGAN
+
+</div>
+
+
+<div class="example-list">
+
+
+<!-- A -->
+
+<div class="example-item">
+
+    <b>A</b>
+
+    →
+
+    <div class="example-shape">
+
+        <svg viewBox="0 0 100 100">
+
+            <circle
+                cx="50"
+                cy="50"
+                r="35"
+                fill="white"
+                stroke="#d63384"
+                stroke-width="5"
+            />
+
+        </svg>
+
+    </div>
+
+</div>
+
+
+
+<!-- I -->
+
+<div class="example-item">
+
+    <b>I</b>
+
+    →
+
+    <div class="example-shape">
+
+        <svg viewBox="0 0 100 100">
+
+            <polygon
+                points="
+                50,12
+                88,50
+                50,88
+                12,50"
+                fill="white"
+                stroke="#6fbd56"
+                stroke-width="5"
+            />
+
+        </svg>
+
+    </div>
+
+</div>
+
+
+
+<!-- U -->
+
+<div class="example-item">
+
+    <b>U</b>
+
+    →
+
+    <div class="example-shape">
+
+        <svg viewBox="0 0 100 100">
+
+            <path
+                d="
+                M50 88
+                L18 55
+                C5 42 12 18 32 18
+                C42 18 48 25 50 33
+                C52 25 58 18 68 18
+                C88 18 95 42 82 55
+                Z"
+                fill="white"
+                stroke="#e69758"
+                stroke-width="5"
+            />
+
+        </svg>
+
+    </div>
+
+</div>
+
+
+
+<!-- E -->
+
+<div class="example-item">
+
+    <b>E</b>
+
+    →
+
+    <div class="example-shape">
+
+        <svg viewBox="0 0 100 100">
+
+            <path
+                d="
+                M20 85
+                V45
+                C20 15 80 15 80 45
+                V85
+                Z"
+                fill="white"
+                stroke="#3978a8"
+                stroke-width="5"
+            />
+
+        </svg>
+
+    </div>
+
+</div>
+
+
+
+<!-- O -->
+
+<div class="example-item">
+
+    <b>O</b>
+
+    →
+
+    <div class="example-shape">
+
+        <svg viewBox="0 0 100 100">
+
+            <polygon
+                points="
+                50,12
+                88,85
+                12,85"
+                fill="white"
+                stroke="#9b55c7"
+                stroke-width="5"
+            />
+
+        </svg>
+
+    </div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+     PERINTAH
+     ===================================================== -->
+
+<div class="instruction">
+
+    👆 Pilih <b>BANGUN</b> terlebih dahulu,
+    kemudian pilih <b>HURUF VOKAL</b> yang sesuai!
+
+</div>
+
+
+
+<!-- FEEDBACK -->
+
+<div
+    id="feedback"
+    class="feedback"
+></div>
+
+
+
+<!-- =====================================================
+     DUA PANEL
+     ===================================================== -->
+
+<div class="columns">
+
+
+<!-- PANEL BANGUN -->
+
+<div class="panel">
+
+
+<div class="panel-title">
+
+    🔷 PILIH BANGUN
+
+</div>
+
+
+<div
+    id="shapeGrid"
+    class="shape-grid"
+></div>
+
+
+</div>
+
+
+
+<!-- PANEL HURUF -->
+
+<div class="panel">
+
+
+<div class="panel-title">
+
+    🔤 PILIH HURUF VOKAL
+
+</div>
+
+
+<div
+    id="letterGrid"
+    class="letter-grid"
+></div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     NEXT
+     ===================================================== -->
+
+<div class="next-area">
+
+<button
+    id="nextButton"
+    class="next"
+    onclick="nextLevel()"
+    style="display:none;"
+>
+
+    ▶ LANJUT
+
+</button>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     LAYAR SELESAI
+     ===================================================== -->
+
+<div
+    id="finishScreen"
+    class="finish-screen"
+    style="display:none;"
+>
+
+
+<div style="font-size:70px;">
+
+    🏆🎉
+
+</div>
+
+
+<h1>
+
+    Hebat!
+
+</h1>
+
+
+<p>
+
+    Kamu telah menyelesaikan
+    semua <b>10 Level</b>.
+
+</p>
+
+
+<div
+    id="finalScore"
+    class="final-score"
+>
+
+    0
+
+</div>
+
+
+<div
+    id="stars"
+    class="stars"
+>
+
+    ⭐⭐⭐
+
+</div>
+
+
+<p id="finalMessage">
+
+</p>
+
+
+<button
+    class="restart-button"
+    onclick="restartGame()"
+>
+
+    🔄 MAIN LAGI
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   KUNCI PASANGAN
+   =========================================================
+
+   INI SANGAT PENTING.
+
+   SEMUA LEVEL SELALU MENGGUNAKAN
+   PASANGAN INI.
+
+   A = LINGKARAN
+   I = BELAH KETUPAT
+   U = HATI
+   E = LENGKUNG
+   O = SEGITIGA
+
+   Tidak ada pasangan lain.
+   ========================================================= */
+
+
+const pasangan = {
+
+    circle: "A",
+
+    diamond: "I",
+
+    heart: "U",
+
+    arch: "E",
+
+    triangle: "O"
+
+};
+
+
+
+/* Nama bentuk */
+
+const namaBentuk = {
+
+    circle:
+        "Lingkaran",
+
+    diamond:
+        "Belah Ketupat",
+
+    heart:
+        "Hati",
+
+    arch:
+        "Bentuk Lengkung",
+
+    triangle:
+        "Segitiga"
+
+};
+
+
+
+/* =========================================================
+   VARIABEL GAME
+   ========================================================= */
+
+let level = 1;
+
+let score = 0;
+
+let matched = 0;
+
+let selectedShape = null;
+
+let selectedLetter = null;
+
+
+/* =========================================================
+   JUMLAH BENTUK PER LEVEL
+   =========================================================
+
+   Semakin tinggi level,
+   semakin banyak pilihan.
+
+   Level 1  = 5
+   Level 2  = 6
+   Level 3  = 7
+   Level 4  = 8
+   Level 5  = 9
+   Level 6  = 10
+   Level 7  = 12
+   Level 8  = 14
+   Level 9  = 16
+   Level 10 = 20
+   ========================================================= */
+
+
+function jumlahBangun() {
+
+    const daftar = {
+
+        1: 5,
+
+        2: 6,
+
+        3: 7,
+
+        4: 8,
+
+        5: 9,
+
+        6: 10,
+
+        7: 12,
+
+        8: 14,
+
+        9: 16,
+
+        10: 20
+
+    };
+
+
+    return daftar[level];
+
+}
+
+
+
+/* =========================================================
+   ACAK
+   ========================================================= */
+
+function shuffle(array) {
+
+    return [...array].sort(
+        () => Math.random() - 0.5
+    );
+
+}
+
+
+
+/* =========================================================
+   SUARA UCAPAN
+   ========================================================= */
+
+function bicara(text) {
+
+    try {
+
+        if (
+            "speechSynthesis"
+            in window
+        ) {
+
+            speechSynthesis.cancel();
+
+
+            const suara =
+                new SpeechSynthesisUtterance(
+                    text
+                );
+
+
+            suara.lang =
+                "id-ID";
+
+
+            suara.rate =
+                0.9;
+
+
+            suara.pitch =
+                1.1;
+
+
+            speechSynthesis.speak(
+                suara
+            );
+
+        }
+
+    }
+
+    catch(error) {
+
+        console.log(
+            "Speech tidak tersedia"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   SUARA TEPUK TANGAN
+   ========================================================= */
+
+function suaraBenar() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        if (!AudioContext)
+            return;
+
+
+        const audio =
+            new AudioContext();
+
+
+        /*
+           Membuat beberapa bunyi pendek
+           sehingga terdengar seperti tepuk tangan.
+        */
+
+        for (
+            let i = 0;
+            i < 7;
+            i++
+        ) {
+
+            const oscillator =
+                audio.createOscillator();
+
+
+            const gain =
+                audio.createGain();
+
+
+            oscillator.type =
+                "triangle";
+
+
+            oscillator.frequency.value =
+                650 +
+                Math.random() *
+                800;
+
+
+            const waktu =
+                audio.currentTime +
+                i * 0.07;
+
+
+            gain.gain.setValueAtTime(
+                0.001,
+                waktu
+            );
+
+
+            gain.gain
+                .exponentialRampToValueAtTime(
+                    0.15,
+                    waktu + 0.01
+                );
+
+
+            gain.gain
+                .exponentialRampToValueAtTime(
+                    0.001,
+                    waktu + 0.06
+                );
+
+
+            oscillator.connect(
+                gain
+            );
+
+
+            gain.connect(
+                audio.destination
+            );
+
+
+            oscillator.start(
+                waktu
+            );
+
+
+            oscillator.stop(
+                waktu + 0.07
+            );
+
+        }
+
+
+        setTimeout(
+            () => audio.close(),
+            1000
+        );
+
+    }
+
+    catch(error) {
+
+        console.log(
+            "Audio tidak tersedia"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   SUARA SALAH
+   ========================================================= */
+
+function suaraSalah() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        if (!AudioContext)
+            return;
+
+
+        const audio =
+            new AudioContext();
+
+
+        const oscillator =
+            audio.createOscillator();
+
+
+        const gain =
+            audio.createGain();
+
+
+        oscillator.type =
+            "sawtooth";
+
+
+        oscillator.frequency.setValueAtTime(
+            250,
+            audio.currentTime
+        );
+
+
+        oscillator.frequency.linearRampToValueAtTime(
+            120,
+            audio.currentTime + 0.3
+        );
+
+
+        gain.gain.setValueAtTime(
+            0.15,
+            audio.currentTime
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audio.currentTime + 0.3
+        );
+
+
+        oscillator.connect(
+            gain
+        );
+
+
+        gain.connect(
+            audio.destination
+        );
+
+
+        oscillator.start();
+
+
+        oscillator.stop(
+            audio.currentTime + 0.3
+        );
+
+    }
+
+    catch(error) {
+
+        console.log(
+            "Audio tidak tersedia"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   MEMBUAT BENTUK SVG
+   ========================================================= */
+
+function buatBentuk(type) {
+
+    const svgNS =
+        "http://www.w3.org/2000/svg";
+
+
+    const svg =
+        document.createElementNS(
+            svgNS,
+            "svg"
+        );
+
+
+    svg.setAttribute(
+        "viewBox",
+        "0 0 100 100"
+    );
+
+
+    let warna;
+
+
+    if (
+        type === "circle"
+    ) {
+
+        warna =
+            "#d63384";
+
+    }
+
+
+    if (
+        type === "diamond"
+    ) {
+
+        warna =
+            "#6fbd56";
+
+    }
+
+
+    if (
+        type === "heart"
+    ) {
+
+        warna =
+            "#e69758";
+
+    }
+
+
+    if (
+        type === "arch"
+    ) {
+
+        warna =
+            "#3978a8";
+
+    }
+
+
+    if (
+        type === "triangle"
+    ) {
+
+        warna =
+            "#9b55c7";
+
+    }
+
+
+    let shape;
+
+
+
+    /* =========================
+       LINGKARAN
+       ========================= */
+
+    if (
+        type === "circle"
+    ) {
+
+        shape =
+            document.createElementNS(
+                svgNS,
+                "circle"
+            );
+
+
+        shape.setAttribute(
+            "cx",
+            "50"
+        );
+
+
+        shape.setAttribute(
+            "cy",
+            "50"
+        );
+
+
+        shape.setAttribute(
+            "r",
+            "35"
+        );
+
+    }
+
+
+
+    /* =========================
+       BELAH KETUPAT
+       ========================= */
+
+    if (
+        type === "diamond"
+    ) {
+
+        shape =
+            document.createElementNS(
+                svgNS,
+                "polygon"
+            );
+
+
+        shape.setAttribute(
+            "points",
+            "50,12 88,50 50,88 12,50"
+        );
+
+    }
+
+
+
+    /* =========================
+       HATI
+       ========================= */
+
+    if (
+        type === "heart"
+    ) {
+
+        shape =
+            document.createElementNS(
+                svgNS,
+                "path"
+            );
+
+
+        shape.setAttribute(
+            "d",
+            `
+            M50 88
+            L18 55
+            C5 42 12 18 32 18
+            C42 18 48 25 50 33
+            C52 25 58 18 68 18
+            C88 18 95 42 82 55
+            Z
+            `
+        );
+
+    }
+
+
+
+    /* =========================
+       LENGKUNG
+       ========================= */
+
+    if (
+        type === "arch"
+    ) {
+
+        shape =
+            document.createElementNS(
+                svgNS,
+                "path"
+            );
+
+
+        shape.setAttribute(
+            "d",
+            `
+            M20 85
+            V45
+            C20 15 80 15 80 45
+            V85
+            Z
+            `
+        );
+
+    }
+
+
+
+    /* =========================
+       SEGITIGA
+       ========================= */
+
+    if (
+        type === "triangle"
+    ) {
+
+        shape =
+            document.createElementNS(
+                svgNS,
+                "polygon"
+            );
+
+
+        shape.setAttribute(
+            "points",
+            "50,12 88,85 12,85"
+        );
+
+    }
+
+
+
+    shape.setAttribute(
+        "fill",
+        "white"
+    );
+
+
+    shape.setAttribute(
+        "stroke",
+        warna
+    );
+
+
+    shape.setAttribute(
+        "stroke-width",
+        "5"
+    );
+
+
+    shape.setAttribute(
+        "stroke-linejoin",
+        "round"
+    );
+
+
+    svg.appendChild(
+        shape
+    );
+
+
+    return svg;
+
+}
+
+
+
+/* =========================================================
+   MULAI GAME
+   ========================================================= */
+
+function startGame() {
+
+    level = 1;
+
+    score = 0;
+
+    matched = 0;
+
+
+    selectedShape =
+        null;
+
+    selectedLetter =
+        null;
+
+
+    document.getElementById(
+        "startScreen"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "finishScreen"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "gameScreen"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "score"
+    ).textContent =
+        score;
+
+
+    tampilkanLevel();
+
+
+    bicara(
+        "Ayo bermain! Perhatikan contoh pasangan."
+    );
+
+}
+
+
+
+/* =========================================================
+   TAMPILKAN LEVEL
+   ========================================================= */
+
+function tampilkanLevel() {
+
+    matched = 0;
+
+
+    selectedShape =
+        null;
+
+
+    selectedLetter =
+        null;
+
+
+    document.getElementById(
+        "level"
+    ).textContent =
+        level;
+
+
+    document.getElementById(
+        "feedback"
+    ).textContent =
+        "";
+
+
+    document.getElementById(
+        "feedback"
+    ).className =
+        "feedback";
+
+
+    document.getElementById(
+        "nextButton"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "progress"
+    ).style.width =
+        "0%";
+
+
+
+    /* ================================================
+       MENENTUKAN JUMLAH BANGUN
+       ================================================ */
+
+    const jumlah =
+        jumlahBangun();
+
+
+
+    /*
+       HANYA menggunakan 5 bentuk
+       yang ada di contoh.
+    */
+
+    const jenisBentuk = [
+
+        "circle",
+
+        "diamond",
+
+        "heart",
+
+        "arch",
+
+        "triangle"
+
+    ];
+
+
+
+    let bentuk = [];
+
+
+
+    /*
+       Membuat bentuk sebanyak jumlah level.
+    */
+
+    for (
+        let i = 0;
+        i < jumlah;
+        i++
+    ) {
+
+        /*
+           Bentuk dipilih secara acak.
+        */
+
+        const randomIndex =
+            Math.floor(
+                Math.random() *
+                jenisBentuk.length
+            );
+
+
+        bentuk.push(
+            jenisBentuk[
+                randomIndex
+            ]
+        );
+
+    }
+
+
+
+    /*
+       Huruf dibuat berdasarkan bentuk.
+       
+       INI MEMASTIKAN:
+       
+       Lingkaran selalu A
+       Belah ketupat selalu I
+       Hati selalu U
+       Lengkung selalu E
+       Segitiga selalu O
+    */
+
+    let huruf =
+        bentuk.map(
+            function(bentuk) {
+
+                return pasangan[
+                    bentuk
+                ];
+
+            }
+        );
+
+
+
+    /*
+       Setelah pasangan dibuat,
+       POSISI huruf diacak.
+    */
+
+    bentuk =
+        shuffle(bentuk);
+
+
+    huruf =
+        shuffle(huruf);
+
+
+
+    /*
+       Tampilkan.
+    */
+
+    buatPilihanBentuk(
+        bentuk
+    );
+
+
+    buatPilihanHuruf(
+        huruf
+    );
+
+
+
+    /*
+       Suara level.
+    */
+
+    if (
+        level === 1
+    ) {
+
+        bicara(
+            "Level satu. Cocokkan bentuk dengan huruf."
+        );
+
+    }
+
+    else {
+
+        bicara(
+            "Level " +
+            level +
+            ". Bentuk dan huruf semakin banyak."
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   MEMBUAT PILIHAN BANGUN
+   ========================================================= */
+
+function buatPilihanBentuk(
+    bentuk
+) {
+
+    const grid =
+        document.getElementById(
+            "shapeGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+
+    bentuk.forEach(
+        function(type) {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "shape-button";
+
+
+            button.dataset.shape =
+                type;
+
+
+            button.title =
+                namaBentuk[
+                    type
+                ];
+
+
+            button.setAttribute(
+                "aria-label",
+                "Bentuk " +
+                namaBentuk[type]
+            );
+
+
+            /*
+               Masukkan SVG
+            */
+
+            button.appendChild(
+                buatBentuk(type)
+            );
+
+
+
+            /*
+               Saat diklik
+            */
+
+            button.onclick =
+                function() {
+
+                    pilihBentuk(
+                        button,
+                        type
+                    );
+
+                };
+
+
+            grid.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   MEMBUAT PILIHAN HURUF
+   ========================================================= */
+
+function buatPilihanHuruf(
+    huruf
+) {
+
+    const grid =
+        document.getElementById(
+            "letterGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+
+    huruf.forEach(
+        function(letter) {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "letter-button";
+
+
+            button.dataset.letter =
+                letter;
+
+
+            button.textContent =
+                letter;
+
+
+            button.setAttribute(
+                "aria-label",
+                "Huruf " +
+                letter
+            );
+
+
+            button.onclick =
+                function() {
+
+                    pilihHuruf(
+                        button,
+                        letter
+                    );
+
+                };
+
+
+            grid.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   PILIH BANGUN
+   ========================================================= */
+
+function pilihBentuk(
+    button,
+    type
+) {
+
+    /*
+       Jika sudah benar,
+       tidak boleh dipilih lagi.
+    */
+
+    if (
+        button.classList.contains(
+            "matched"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+
+    /*
+       Hapus pilihan bangun sebelumnya.
+    */
+
+    document
+        .querySelectorAll(
+            ".shape-button"
+        )
+        .forEach(
+            function(item) {
+
+                item.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
+
+
+    /*
+       Tandai bangun.
+    */
+
+    button.classList.add(
+        "selected"
+    );
+
+
+
+    selectedShape = {
+
+        button:
+            button,
+
+        type:
+            type
+
+    };
+
+
+
+    /*
+       Cek apakah huruf
+       sudah dipilih.
+    */
+
+    cekPasangan();
+
+}
+
+
+
+/* =========================================================
+   PILIH HURUF
+   ========================================================= */
+
+function pilihHuruf(
+    button,
+    letter
+) {
+
+    if (
+        button.classList.contains(
+            "matched"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+
+    /*
+       Hapus pilihan huruf sebelumnya.
+    */
+
+    document
+        .querySelectorAll(
+            ".letter-button"
+        )
+        .forEach(
+            function(item) {
+
+                item.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
+
+
+    button.classList.add(
+        "selected"
+    );
+
+
+
+    selectedLetter = {
+
+        button:
+            button,
+
+        letter:
+            letter
+
+    };
+
+
+
+    cekPasangan();
+
+}
+
+
+
+/* =========================================================
+   CEK PASANGAN
+   ========================================================= */
+
+function cekPasangan() {
+
+    /*
+       Harus memilih keduanya.
+    */
+
+    if (
+        !selectedShape ||
+        !selectedLetter
+    ) {
+
+        return;
+
+    }
+
+
+
+    /*
+       Cari huruf yang benar
+       dari contoh pasangan.
+    */
+
+    const jawabanBenar =
+        pasangan[
+            selectedShape.type
+        ];
+
+
+
+    /* =====================================================
+       JIKA BENAR
+       ===================================================== */
+
+    if (
+        jawabanBenar ===
+        selectedLetter.letter
+    ) {
+
+
+        matched++;
+
+
+        /*
+           Setiap benar +10.
+        */
+
+        score += 10;
+
+
+        document.getElementById(
+            "score"
+        ).textContent =
+            score;
+
+
+
+        /*
+           Hilangkan status selected.
+        */
+
+        selectedShape.button
+            .classList
+            .remove(
+                "selected"
+            );
+
+
+        selectedLetter.button
+            .classList
+            .remove(
+                "selected"
+            );
+
+
+
+        /*
+           Tandai sudah benar.
+        */
+
+        selectedShape.button
+            .classList
+            .add(
+                "matched"
+            );
+
+
+        selectedLetter.button
+            .classList
+            .add(
+                "matched"
+            );
+
+
+
+        /*
+           Tambahkan tanda centang.
+        */
+
+        selectedShape.button
+            .innerHTML +=
+            `
+            <span
+                style="
+                position:absolute;
+                top:4px;
+                right:6px;
+                color:#27ae60;
+                font-size:20px;
+                font-weight:bold;
+                "
+            >
+                ✓
+            </span>
+            `;
+
+
+        selectedLetter.button
+            .innerHTML +=
+            `
+            <span
+                style="
+                position:absolute;
+                top:4px;
+                right:6px;
+                color:#27ae60;
+                font-size:20px;
+                font-weight:bold;
+                "
+            >
+                ✓
+            </span>
+            `;
+
+
+
+        /*
+           Pesan benar.
+        */
+
+        const feedback =
+            document.getElementById(
+                "feedback"
+            );
+
+
+        feedback.textContent =
+            "🎉 BENAR! Hebat! 👏";
+
+
+        feedback.className =
+            "feedback correct";
+
+
+
+        /*
+           Suara.
+        */
+
+        suaraBenar();
+
+
+        bicara(
+            "Benar! Hebat!"
+        );
+
+
+
+        /*
+           Progress.
+        */
+
+        const jumlah =
+            jumlahBangun();
+
+
+        const persen =
+            (
+                matched /
+                jumlah
+            ) * 100;
+
+
+        document.getElementById(
+            "progress"
+        ).style.width =
+            persen + "%";
+
+
+
+        /*
+           Reset pilihan.
+        */
+
+        selectedShape =
+            null;
+
+        selectedLetter =
+            null;
+
+
+
+        /*
+           Jika semua selesai.
+        */
+
+        if (
+            matched >= jumlah
+        ) {
+
+            document.getElementById(
+                "nextButton"
+            ).style.display =
+                "inline-block";
+
+
+
+            if (
+                level < 10
+            ) {
+
+                bicara(
+                    "Hebat! Level selesai."
+                );
+
+            }
+
+            else {
+
+                bicara(
+                    "Selamat! Semua level selesai."
+                );
+
+            }
+
+        }
+
+    }
+
+
+
+    /* =====================================================
+       JIKA SALAH
+       ===================================================== */
+
+    else {
+
+
+        const feedback =
+            document.getElementById(
+                "feedback"
+            );
+
+
+        feedback.textContent =
+            "❌ SALAH! Coba lagi.";
+
+
+        feedback.className =
+            "feedback wrong";
+
+
+
+        suaraSalah();
+
+
+        bicara(
+            "Salah, coba lagi."
+        );
+
+
+
+        /*
+           Hilangkan pilihan setelah
+           setengah detik.
+        */
+
+        setTimeout(
+            function() {
+
+
+                if (
+                    selectedShape
+                ) {
+
+                    selectedShape.button
+                        .classList
+                        .remove(
+                            "selected"
+                        );
+
+                }
+
+
+                if (
+                    selectedLetter
+                ) {
+
+                    selectedLetter.button
+                        .classList
+                        .remove(
+                            "selected"
+                        );
+
+                }
+
+
+                selectedShape =
+                    null;
+
+
+                selectedLetter =
+                    null;
+
+
+            },
+            500
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   LEVEL BERIKUTNYA
+   ========================================================= */
+
+function nextLevel() {
+
+    if (
+        level < 10
+    ) {
+
+        level++;
+
+
+        tampilkanLevel();
+
+
+        bicara(
+            "Level " +
+            level +
+            ". Ayo lanjut!"
+        );
+
+    }
+
+    else {
+
+        selesai();
+
+    }
+
+}
+
+
+
+/* =========================================================
+   GAME SELESAI
+   ========================================================= */
+
+function selesai() {
+
+    document.getElementById(
+        "gameScreen"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "finishScreen"
+    ).style.display =
+        "block";
+
+
+
+    /*
+       Nilai akhir.
+    */
+
+    document.getElementById(
+        "finalScore"
+    ).textContent =
+        score;
+
+
+
+    const persentase =
+        score / 500;
+
+
+
+    /*
+       Bintang.
+    */
+
+    if (
+        persentase >= 0.9
+    ) {
+
+        document.getElementById(
+            "stars"
+        ).textContent =
+            "⭐⭐⭐";
+
+
+        document.getElementById(
+            "finalMessage"
+        ).textContent =
+            "🌟 Luar biasa! Kamu sangat hebat mencocokkan huruf dan bentuk!";
+
+    }
+
+    else if (
+        persentase >= 0.7
+    ) {
+
+        document.getElementById(
+            "stars"
+        ).textContent =
+            "⭐⭐";
+
+
+        document.getElementById(
+            "finalMessage"
+        ).textContent =
+            "👏 Bagus sekali! Terus berlatih agar semakin pintar!";
+
+    }
+
+    else {
+
+        document.getElementById(
+            "stars"
+        ).textContent =
+            "⭐";
+
+
+        document.getElementById(
+            "finalMessage"
+        ).textContent =
+            "😊 Hebat! Kamu sudah menyelesaikan semua level!";
+
+    }
+
+
+
+    suaraBenar();
+
+
+    bicara(
+        "Selamat! Semua sepuluh level selesai!"
+    );
+
+}
+
+
+
+/* =========================================================
+   MAIN LAGI
+   ========================================================= */
+
+function restartGame() {
+
+    level = 1;
+
+    score = 0;
+
+    matched = 0;
+
+
+    selectedShape =
+        null;
+
+
+    selectedLetter =
+        null;
+
+
+    document.getElementById(
+        "finishScreen"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "gameScreen"
+    ).style.display =
+        "block";
+
+
+    tampilkanLevel();
+
+}
+
+</script>
+
+</body>
+</html>

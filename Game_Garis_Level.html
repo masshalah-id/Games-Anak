@@ -1,0 +1,3279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+      maximum-scale=1.0, user-scalable=no">
+
+<title>🏠 Cocokkan Warna Rumah</title>
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family:
+        "Comic Sans MS",
+        "Chalkboard SE",
+        Arial,
+        sans-serif;
+
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fce4ec 0%,
+            #e8f5e9 50%,
+            #e3f2fd 100%
+        );
+
+    overflow-x: hidden;
+
+    user-select: none;
+
+    touch-action: none;
+}
+
+
+/* =====================================================
+   CONTAINER
+===================================================== */
+
+.game-container {
+    width: 100%;
+    max-width: 1150px;
+
+    margin: 0 auto;
+
+    padding: 10px;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header {
+    text-align: center;
+
+    padding: 18px 12px;
+
+    margin-bottom: 12px;
+
+    border-radius: 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff6b9d,
+            #c44dff,
+            #4dc9f6
+        );
+
+    box-shadow:
+        0 6px 25px
+        rgba(0,0,0,.18);
+}
+
+.header h1 {
+    color: white;
+
+    font-size:
+        clamp(
+            1.4rem,
+            4.5vw,
+            2.4rem
+        );
+
+    text-shadow:
+        3px 3px 8px
+        rgba(0,0,0,.35);
+}
+
+.header p {
+    margin-top: 6px;
+
+    color: #fffde7;
+
+    font-size:
+        clamp(
+            .85rem,
+            2.5vw,
+            1.15rem
+        );
+}
+
+.level-badge {
+    display: inline-block;
+
+    margin-top: 9px;
+
+    padding: 6px 16px;
+
+    border-radius: 20px;
+
+    color: white;
+
+    font-weight: bold;
+
+    background:
+        rgba(255,255,255,.25);
+}
+
+
+/* =====================================================
+   SCORE BAR
+===================================================== */
+
+.score-bar {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    padding: 10px 16px;
+
+    margin-bottom: 12px;
+
+    background: white;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,.1);
+}
+
+.score-display {
+    color: #e91e63;
+
+    font-size:
+        clamp(
+            .9rem,
+            3vw,
+            1.25rem
+        );
+
+    font-weight: bold;
+
+    white-space: nowrap;
+}
+
+.progress-bar {
+    flex: 1;
+
+    min-width: 130px;
+
+    height: 24px;
+
+    overflow: hidden;
+
+    background: #e0e0e0;
+
+    border-radius: 15px;
+}
+
+.progress-fill {
+    width: 0%;
+
+    height: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-width: 35px;
+
+    color: white;
+
+    font-size: .75rem;
+
+    font-weight: bold;
+
+    background:
+        linear-gradient(
+            90deg,
+            #4caf50,
+            #8bc34a,
+            #cddc39
+        );
+
+    border-radius: 15px;
+
+    transition:
+        width .5s ease;
+}
+
+.btn-sound {
+    border: none;
+
+    padding: 8px 16px;
+
+    border-radius: 22px;
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: .95rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c4dff,
+            #536dfe
+        );
+}
+
+
+/* =====================================================
+   GAME BOARD
+===================================================== */
+
+.game-board {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 18px;
+
+    align-items: start;
+}
+
+.column {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    min-width: 0;
+}
+
+.column-title {
+    padding: 10px;
+
+    margin-bottom: 2px;
+
+    text-align: center;
+
+    color: #5d4037;
+
+    font-size:
+        clamp(
+            .9rem,
+            2.5vw,
+            1.2rem
+        );
+
+    font-weight: bold;
+
+    background:
+        rgba(255,255,255,.9);
+
+    border-radius: 14px;
+}
+
+
+/* =====================================================
+   KARTU RUMAH
+===================================================== */
+
+.house-card {
+    position: relative;
+
+    min-height: 115px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 8px;
+
+    background: white;
+
+    border: 3px solid transparent;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 4px 18px
+        rgba(0,0,0,.1);
+
+    cursor: grab;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border .25s ease;
+}
+
+.house-card:active {
+    cursor: grabbing;
+}
+
+.house-card.dragging {
+    opacity: .45;
+
+    transform:
+        scale(.92);
+
+    border-color: #ff6b9d;
+
+    box-shadow:
+        0 8px 30px
+        rgba(255,107,157,.4);
+}
+
+.house-card.matched {
+    border-color: #4caf50;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e8f5e9,
+            #c8e6c9
+        );
+
+    cursor: default;
+
+    animation:
+        matchPop .5s ease;
+}
+
+.house-card.wrong {
+    border-color: #f44336;
+
+    background: #ffebee;
+
+    animation:
+        shakeCard .5s ease;
+}
+
+
+/* =====================================================
+   RUMAH SVG
+===================================================== */
+
+.house-svg {
+    display: block;
+
+    width: 82px;
+
+    height: 98px;
+}
+
+
+/* =====================================================
+   ANIMASI
+===================================================== */
+
+@keyframes matchPop {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.1);
+    }
+
+    70% {
+        transform: scale(.97);
+    }
+}
+
+@keyframes shakeCard {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    15% {
+        transform: translateX(-10px);
+    }
+
+    30% {
+        transform: translateX(10px);
+    }
+
+    45% {
+        transform: translateX(-7px);
+    }
+
+    60% {
+        transform: translateX(7px);
+    }
+
+    75% {
+        transform: translateX(-3px);
+    }
+
+    90% {
+        transform: translateX(3px);
+    }
+}
+
+
+/* =====================================================
+   KARTU PASANGAN
+===================================================== */
+
+.shape-card {
+    min-height: 115px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 17px;
+
+    padding: 12px;
+
+    background: white;
+
+    border:
+        3px dashed
+        #bdbdbd;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 4px 18px
+        rgba(0,0,0,.1);
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        border .25s ease;
+}
+
+.shape-card.drag-over {
+    transform: scale(1.04);
+
+    border:
+        3px solid
+        #7c4dff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ede7f6,
+            #d1c4e9
+        );
+
+    box-shadow:
+        0 8px 30px
+        rgba(124,77,255,.3);
+}
+
+.shape-card.matched {
+    border:
+        3px solid
+        #4caf50;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e8f5e9,
+            #c8e6c9
+        );
+}
+
+
+/* =====================================================
+   BENTUK PASANGAN
+===================================================== */
+
+.shape-item {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* ATAP = SEGITIGA */
+
+.shape-triangle {
+    width: 0;
+
+    height: 0;
+
+    border-left:
+        22px solid transparent;
+
+    border-right:
+        22px solid transparent;
+
+    border-bottom:
+        40px solid;
+
+    filter:
+        drop-shadow(
+            0 2px 2px
+            rgba(0,0,0,.15)
+        );
+}
+
+
+/* BADAN = PERSEGI BESAR */
+
+.shape-square-large {
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 4px;
+
+    border:
+        2px solid
+        rgba(0,0,0,.2);
+
+    box-shadow:
+        0 2px 4px
+        rgba(0,0,0,.15);
+}
+
+
+/* PINTU = PERSEGI KECIL */
+
+.shape-square-small {
+    width: 22px;
+
+    height: 22px;
+
+    border-radius: 3px;
+
+    border:
+        2px solid
+        rgba(0,0,0,.2);
+
+    box-shadow:
+        0 2px 4px
+        rgba(0,0,0,.15);
+}
+
+
+/* =====================================================
+   CONNECTOR
+===================================================== */
+
+.connector-area {
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    pointer-events: none;
+
+    z-index: 5;
+}
+
+.connector-line {
+    fill: none;
+
+    stroke:
+        #4caf50;
+
+    stroke-width:
+        3.5;
+
+    stroke-linecap:
+        round;
+
+    stroke-dasharray:
+        10,5;
+
+    animation:
+        dashScroll
+        1.2s
+        linear
+        infinite;
+}
+
+@keyframes dashScroll {
+    to {
+        stroke-dashoffset: -15;
+    }
+}
+
+
+/* =====================================================
+   FEEDBACK
+===================================================== */
+
+.feedback-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 1000;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    transition:
+        opacity .25s;
+}
+
+.feedback-overlay.show {
+    opacity: 1;
+}
+
+.feedback-text {
+    padding:
+        20px 45px;
+
+    border-radius: 28px;
+
+    font-size:
+        clamp(
+            2rem,
+            8vw,
+            4rem
+        );
+
+    color: white;
+
+    font-weight: bold;
+
+    text-shadow:
+        3px 3px 8px
+        rgba(0,0,0,.3);
+
+    animation:
+        popIn .4s ease;
+}
+
+.feedback-correct {
+    background:
+        linear-gradient(
+            135deg,
+            #4caf50,
+            #66bb6a
+        );
+
+    box-shadow:
+        0 8px 40px
+        rgba(76,175,80,.5);
+}
+
+.feedback-wrong {
+    background:
+        linear-gradient(
+            135deg,
+            #f44336,
+            #ef5350
+        );
+
+    box-shadow:
+        0 8px 40px
+        rgba(244,67,54,.4);
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(.2);
+
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+
+        opacity: 1;
+    }
+}
+
+
+/* =====================================================
+   CONFETTI
+===================================================== */
+
+.confetti-container {
+    position: fixed;
+
+    inset: 0;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    z-index: 999;
+}
+
+.confetti-piece {
+    position: absolute;
+
+    top: -20px;
+
+    animation:
+        confettiFall
+        3s
+        ease-in
+        forwards;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform:
+            translateY(0)
+            rotate(0deg);
+
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            translateY(105vh)
+            rotate(720deg);
+
+        opacity: 0;
+    }
+}
+
+
+/* =====================================================
+   MODAL MENANG
+===================================================== */
+
+.win-modal {
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 2000;
+
+    background:
+        rgba(0,0,0,.65);
+
+    backdrop-filter:
+        blur(5px);
+}
+
+.win-modal.show {
+    display: flex;
+}
+
+.win-content {
+    width: 420px;
+
+    max-width: 92%;
+
+    padding: 40px 30px;
+
+    text-align: center;
+
+    background: white;
+
+    border-radius: 35px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.3);
+
+    animation:
+        winBounce .6s ease;
+}
+
+@keyframes winBounce {
+    0% {
+        transform:
+            scale(0)
+            rotate(-5deg);
+    }
+
+    50% {
+        transform:
+            scale(1.08)
+            rotate(2deg);
+    }
+
+    100% {
+        transform:
+            scale(1)
+            rotate(0);
+    }
+}
+
+.win-content h2 {
+    color: #e91e63;
+
+    font-size:
+        clamp(
+            1.5rem,
+            5vw,
+            2.5rem
+        );
+}
+
+.stars {
+    margin: 12px 0;
+
+    font-size: 3.2rem;
+}
+
+.win-content p {
+    margin-bottom: 22px;
+
+    color: #5d4037;
+
+    font-size: 1.1rem;
+
+    line-height: 1.5;
+}
+
+.btn-restart {
+    padding: 15px 40px;
+
+    border: none;
+
+    border-radius: 35px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff6b9d,
+            #c44dff
+        );
+
+    font-family: inherit;
+
+    font-size: 1.2rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 20px
+        rgba(196,77,255,.4);
+}
+
+
+/* =====================================================
+   RESPONSIVE TABLET / HP
+===================================================== */
+
+@media(max-width:768px) {
+
+    .game-board {
+        grid-template-columns:
+            1fr;
+    }
+
+    .column {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 8px;
+    }
+
+    .column-title {
+        grid-column:
+            1 / -1;
+    }
+
+    .house-card,
+    .shape-card {
+        min-height: 90px;
+    }
+
+    .house-svg {
+        width: 62px;
+
+        height: 75px;
+    }
+
+    .shape-triangle {
+        border-left-width: 18px;
+
+        border-right-width: 18px;
+
+        border-bottom-width: 33px;
+    }
+
+    .shape-square-large {
+        width: 35px;
+
+        height: 35px;
+    }
+
+    .shape-square-small {
+        width: 19px;
+
+        height: 19px;
+    }
+}
+
+
+/* =====================================================
+   HP KECIL
+===================================================== */
+
+@media(max-width:480px) {
+
+    .game-container {
+        padding: 7px;
+    }
+
+    .score-bar {
+        padding: 9px;
+    }
+
+    .column {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .shape-card {
+        gap: 8px;
+
+        padding: 8px;
+    }
+
+    .house-svg {
+        width: 52px;
+
+        height: 64px;
+    }
+
+    .shape-triangle {
+        border-left-width: 15px;
+
+        border-right-width: 15px;
+
+        border-bottom-width: 28px;
+    }
+
+    .shape-square-large {
+        width: 30px;
+
+        height: 30px;
+    }
+
+    .shape-square-small {
+        width: 17px;
+
+        height: 17px;
+    }
+
+}
+/* =====================================================
+   TOMBOL KEMBALI KE HOME
+===================================================== */
+
+.home-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    margin-bottom: 12px;
+    padding: 11px 20px;
+
+    background: linear-gradient(
+        135deg,
+        #ff6b9d,
+        #c44dff
+    );
+
+    color: white;
+
+    border: none;
+    border-radius: 14px;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    text-decoration: none;
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 12px
+        rgba(0,0,0,.15);
+
+    transition: .2s;
+}
+
+.home-button:hover {
+    transform: translateY(-2px) scale(1.03);
+
+    box-shadow:
+        0 6px 16px
+        rgba(0,0,0,.20);
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<div class="game-container">
+
+<a href="index.html" class="home-button">
+    🏠 Kembali ke Home
+</a>
+
+    <!-- =================================================
+         HEADER
+    ================================================= -->
+
+    <div class="header">
+
+        <h1>
+            🏠 Cocokkan Warna Rumah! 🎨
+        </h1>
+
+        <p>
+            Cocokkan warna atap, badan,
+            dan pintu dengan bentuk yang tepat!
+        </p>
+
+        <div
+            class="level-badge"
+            id="levelInfo"
+        >
+            Level 1 • 3 pasangan
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SCORE
+    ================================================= -->
+
+    <div class="score-bar">
+
+        <div class="score-display">
+
+            ⭐ Level
+            <span id="level">1</span>/10
+
+            &nbsp; | &nbsp;
+
+            Skor:
+            <span id="score">0</span>/
+            <span id="totalPairs">3</span>
+
+        </div>
+
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                id="progressFill"
+            >
+                0%
+            </div>
+
+        </div>
+
+
+        <button
+            class="btn-sound"
+            id="btnSound"
+            onclick="toggleSound()"
+        >
+            🔊 Suara ON
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         GAME BOARD
+    ================================================= -->
+
+    <div
+        class="game-board"
+        id="gameBoard"
+    >
+
+
+        <!-- RUMAH -->
+
+        <div
+            class="column"
+            id="housesColumn"
+        >
+
+            <div class="column-title">
+                🏠 Rumah
+            </div>
+
+        </div>
+
+
+        <!-- PASANGAN -->
+
+        <div
+            class="column"
+            id="shapesColumn"
+        >
+
+            <div class="column-title">
+                🎨 Bentuk & Warna
+            </div>
+
+        </div>
+
+
+        <svg
+            class="connector-area"
+            id="connectorSvg"
+        ></svg>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FEEDBACK
+===================================================== -->
+
+<div
+    class="feedback-overlay"
+    id="feedbackOverlay"
+>
+
+    <div
+        class="feedback-text"
+        id="feedbackText"
+    ></div>
+
+</div>
+
+
+<!-- =====================================================
+     CONFETTI
+===================================================== -->
+
+<div
+    class="confetti-container"
+    id="confettiContainer"
+></div>
+
+
+<!-- =====================================================
+     MODAL MENANG
+===================================================== -->
+
+<div
+    class="win-modal"
+    id="winModal"
+>
+
+    <div class="win-content">
+
+        <h2>
+            🎉 HEBAT SEKALI! 🎉
+        </h2>
+
+        <div class="stars">
+            ⭐⭐⭐⭐⭐
+        </div>
+
+        <p>
+
+            Semua pasangan berhasil
+            dicocokkan dengan benar!
+
+            <br><br>
+
+            <span id="winLevelText">
+                Siap naik ke level berikutnya!
+            </span>
+
+        </p>
+
+        <button
+            class="btn-restart"
+            onclick="nextLevel()"
+        >
+
+            <span id="nextButtonText">
+                Level Berikutnya!
+            </span>
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   LEVEL
+===================================================== */
+
+const LEVELS = [
+
+    { pairs: 3 },
+
+    { pairs: 4 },
+
+    { pairs: 5 },
+
+    { pairs: 6 },
+
+    { pairs: 7 },
+
+    { pairs: 8 },
+
+    { pairs: 9 },
+
+    { pairs: 10 },
+
+    { pairs: 11 },
+
+    { pairs: 12 }
+
+];
+
+
+/* =====================================================
+   WARNA
+===================================================== */
+
+const COLORS = [
+
+    "#2196F3",   // Biru
+
+    "#4CAF50",   // Hijau
+
+    "#F44336",   // Merah
+
+    "#FFC107",   // Kuning
+
+    "#FF9800",   // Oranye
+
+    "#9C27B0",   // Ungu
+
+    "#00BCD4",   // Toska
+
+    "#E91E63",   // Pink
+
+    "#795548"    // Cokelat
+
+];
+
+
+/* =====================================================
+   VARIABEL
+===================================================== */
+
+let level = 1;
+
+let score = 0;
+
+let totalPairs = 3;
+
+let soundEnabled = true;
+
+let matchedPairs = new Set();
+
+let audioCtx = null;
+
+let draggedEl = null;
+
+let touchClone = null;
+
+let touchOffX = 0;
+
+let touchOffY = 0;
+
+
+/* =====================================================
+   KONFIGURASI
+===================================================== */
+
+function getLevelConfig() {
+
+    return LEVELS[level - 1];
+
+}
+
+
+/* =====================================================
+   SHUFFLE
+===================================================== */
+
+function shuffle(array) {
+
+    const result = [...array];
+
+    for (
+        let i = result.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() *
+                (i + 1)
+            );
+
+        [
+            result[i],
+            result[j]
+        ] = [
+            result[j],
+            result[i]
+        ];
+
+    }
+
+    return result;
+
+}
+
+
+/* =====================================================
+   MEMBUAT DATA LEVEL
+=====================================================
+
+   SATU KOMBINASI:
+
+   roof = warna segitiga
+   body = warna persegi besar
+   door = warna persegi kecil
+
+===================================================== */
+
+function makeLevelData() {
+
+    const cfg =
+        getLevelConfig();
+
+    const combinations = [];
+
+    /*
+       Membuat seluruh kombinasi
+       tiga warna yang berbeda.
+    */
+
+    for (
+        let a = 0;
+        a < COLORS.length;
+        a++
+    ) {
+
+        for (
+            let b = 0;
+            b < COLORS.length;
+            b++
+        ) {
+
+            if (b === a)
+                continue;
+
+            for (
+                let c = 0;
+                c < COLORS.length;
+                c++
+            ) {
+
+                if (
+                    c === a ||
+                    c === b
+                ) {
+
+                    continue;
+
+                }
+
+                combinations.push({
+
+                    roof:
+                        COLORS[a],
+
+                    body:
+                        COLORS[b],
+
+                    door:
+                        COLORS[c]
+
+                });
+
+            }
+
+        }
+
+    }
+
+
+    /*
+       Acak kombinasi.
+    */
+
+    const selected =
+        shuffle(combinations);
+
+
+    const pairs = [];
+
+
+    /*
+       Ambil jumlah sesuai level.
+    */
+
+    for (
+        let i = 0;
+        i < cfg.pairs;
+        i++
+    ) {
+
+        const combo =
+            selected[i];
+
+
+        pairs.push({
+
+            id:
+                "pair-" + i,
+
+            house: {
+
+                roof:
+                    combo.roof,
+
+                body:
+                    combo.body,
+
+                door:
+                    combo.door
+
+            }
+
+        });
+
+    }
+
+
+    return pairs;
+
+}
+
+
+/* =====================================================
+   SVG RUMAH
+===================================================== */
+
+function houseSVG(h) {
+
+    return `
+
+        <svg
+            class="house-svg"
+            viewBox="0 0 100 120"
+        >
+
+            <!--
+                ATAP = SEGITIGA
+            -->
+
+            <polygon
+                points="
+                    50,5
+                    95,50
+                    5,50
+                "
+                fill="${h.roof}"
+                stroke="#444"
+                stroke-width="2.5"
+                stroke-linejoin="round"
+            />
+
+
+            <!--
+                BADAN = PERSEGI BESAR
+            -->
+
+            <rect
+                x="15"
+                y="50"
+                width="70"
+                height="60"
+                fill="${h.body}"
+                stroke="#444"
+                stroke-width="2.5"
+                rx="3"
+            />
+
+
+            <!--
+                PINTU = PERSEGI KECIL
+            -->
+
+            <rect
+                x="37"
+                y="72"
+                width="26"
+                height="35"
+                fill="${h.door}"
+                stroke="#444"
+                stroke-width="1.5"
+                rx="2"
+            />
+
+
+            <!-- GAGANG PINTU -->
+
+            <circle
+                cx="57"
+                cy="90"
+                r="3.5"
+                fill="#FFD700"
+                stroke="#B8860B"
+                stroke-width="1"
+            />
+
+        </svg>
+
+    `;
+
+}
+
+
+/* =====================================================
+   KARTU PASANGAN
+=====================================================
+
+   WAJIB SAMA DENGAN RUMAH:
+
+   🔺 = ATAP
+   ⬛ = BADAN
+   ◼️ = PINTU
+
+===================================================== */
+
+function shapeCardHTML(p) {
+
+    return `
+
+        <!-- =========================================
+             1. ATAP = SEGITIGA
+             WARNA = WARNA ATAP RUMAH
+        ========================================== -->
+
+        <div
+            class="shape-item"
+            title="Atap"
+        >
+
+            <div
+                class="shape-triangle"
+                style="
+                    border-bottom-color:
+                    ${p.house.roof};
+                "
+            ></div>
+
+        </div>
+
+
+        <!-- =========================================
+             2. BADAN = PERSEGI BESAR
+             WARNA = WARNA BADAN RUMAH
+        ========================================== -->
+
+        <div
+            class="shape-item"
+            title="Badan rumah"
+        >
+
+            <div
+                class="shape-square-large"
+                style="
+                    background:
+                    ${p.house.body};
+                "
+            ></div>
+
+        </div>
+
+
+        <!-- =========================================
+             3. PINTU = PERSEGI KECIL
+             WARNA = WARNA PINTU RUMAH
+        ========================================== -->
+
+        <div
+            class="shape-item"
+            title="Pintu"
+        >
+
+            <div
+                class="shape-square-small"
+                style="
+                    background:
+                    ${p.house.door};
+                "
+            ></div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   AUDIO
+===================================================== */
+
+function initAudio() {
+
+    if (audioCtx)
+        return;
+
+    const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+    if (AudioContext) {
+
+        audioCtx =
+            new AudioContext();
+
+    }
+
+}
+
+
+/* =====================================================
+   PLAY TONE
+===================================================== */
+
+function playTone(
+    freq,
+    startTime,
+    duration,
+    type = "sine",
+    volume = .25
+) {
+
+    if (
+        !soundEnabled ||
+        !audioCtx
+    ) {
+
+        return;
+
+    }
+
+    const osc =
+        audioCtx.createOscillator();
+
+    const gain =
+        audioCtx.createGain();
+
+    osc.type =
+        type;
+
+    osc.frequency.setValueAtTime(
+        freq,
+        startTime
+    );
+
+    gain.gain.setValueAtTime(
+        volume,
+        startTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        startTime + duration
+    );
+
+    osc.connect(gain);
+
+    gain.connect(
+        audioCtx.destination
+    );
+
+    osc.start(
+        startTime
+    );
+
+    osc.stop(
+        startTime + duration
+    );
+
+}
+
+
+/* =====================================================
+   SUARA BENAR
+===================================================== */
+
+function playCorrectSound() {
+
+    initAudio();
+
+    if (!audioCtx)
+        return;
+
+    const t =
+        audioCtx.currentTime;
+
+    const notes = [
+
+        523.25,
+        659.25,
+        783.99,
+        1046.50
+
+    ];
+
+    notes.forEach(
+        (freq, i) => {
+
+            playTone(
+                freq,
+                t + i * .11,
+                .25,
+                "triangle",
+                .22
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SUARA SALAH
+===================================================== */
+
+function playWrongSound() {
+
+    initAudio();
+
+    if (!audioCtx)
+        return;
+
+    const t =
+        audioCtx.currentTime;
+
+    const osc =
+        audioCtx.createOscillator();
+
+    const gain =
+        audioCtx.createGain();
+
+    osc.type =
+        "sawtooth";
+
+    osc.frequency.setValueAtTime(
+        280,
+        t
+    );
+
+    osc.frequency.linearRampToValueAtTime(
+        120,
+        t + .35
+    );
+
+    gain.gain.setValueAtTime(
+        .18,
+        t
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        t + .35
+    );
+
+    osc.connect(gain);
+
+    gain.connect(
+        audioCtx.destination
+    );
+
+    osc.start(t);
+
+    osc.stop(
+        t + .35
+    );
+
+}
+
+
+/* =====================================================
+   SUARA MENANG
+===================================================== */
+
+function playWinSound() {
+
+    initAudio();
+
+    if (!audioCtx)
+        return;
+
+    const t =
+        audioCtx.currentTime;
+
+    const melody = [
+
+        [523.25, 0],
+
+        [523.25, .14],
+
+        [659.25, .28],
+
+        [783.99, .42],
+
+        [1046.50, .56],
+
+        [1046.50, .76],
+
+        [1046.50, .96]
+
+    ];
+
+    melody.forEach(
+        ([freq, delay]) => {
+
+            playTone(
+                freq,
+                t + delay,
+                .35,
+                "triangle",
+                .22
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SUARA KLIK
+===================================================== */
+
+function playClickSound() {
+
+    initAudio();
+
+    if (!audioCtx)
+        return;
+
+    playTone(
+        900,
+        audioCtx.currentTime,
+        .08,
+        "sine",
+        .12
+    );
+
+}
+
+
+/* =====================================================
+   TOGGLE SOUND
+===================================================== */
+
+function toggleSound() {
+
+    soundEnabled =
+        !soundEnabled;
+
+    document.getElementById(
+        "btnSound"
+    ).textContent =
+        soundEnabled
+        ? "🔊 Suara ON"
+        : "🔇 Suara OFF";
+
+}
+
+
+/* =====================================================
+   SPEAK
+===================================================== */
+
+function speak(text) {
+
+    if (
+        !soundEnabled ||
+        !("speechSynthesis" in window)
+    ) {
+
+        return;
+
+    }
+
+    window.speechSynthesis.cancel();
+
+    const u =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+    u.lang =
+        "id-ID";
+
+    u.rate =
+        .9;
+
+    u.pitch =
+        1.15;
+
+    window.speechSynthesis.speak(u);
+
+}
+
+
+/* =====================================================
+   INIT GAME
+===================================================== */
+
+function initGame() {
+
+    const housesColumn =
+        document.getElementById(
+            "housesColumn"
+        );
+
+    const shapesColumn =
+        document.getElementById(
+            "shapesColumn"
+        );
+
+
+    /*
+       Hapus kartu lama.
+    */
+
+    housesColumn
+        .querySelectorAll(
+            ".house-card"
+        )
+        .forEach(
+            el => el.remove()
+        );
+
+    shapesColumn
+        .querySelectorAll(
+            ".shape-card"
+        )
+        .forEach(
+            el => el.remove()
+        );
+
+
+    /*
+       Hapus garis.
+    */
+
+    document.getElementById(
+        "connectorSvg"
+    ).innerHTML = "";
+
+
+    /*
+       Data level.
+    */
+
+    const data =
+        makeLevelData();
+
+
+    totalPairs =
+        data.length;
+
+
+    /*
+       Reset.
+    */
+
+    score = 0;
+
+    matchedPairs.clear();
+
+
+    /*
+       Update header.
+    */
+
+    document.getElementById(
+        "level"
+    ).textContent =
+        level;
+
+    document.getElementById(
+        "totalPairs"
+    ).textContent =
+        totalPairs;
+
+    document.getElementById(
+        "levelInfo"
+    ).textContent =
+        `Level ${level} • ${totalPairs} pasangan`;
+
+
+    updateScore();
+
+
+    /*
+       Buat rumah.
+       Posisi rumah diacak.
+    */
+
+    shuffle(data).forEach(
+        p => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "house-card";
+
+            card.id =
+                p.id;
+
+            card.draggable =
+                true;
+
+            card.dataset.houseId =
+                p.id;
+
+            /*
+               Simpan kombinasi warna
+               sebagai pengaman tambahan.
+            */
+
+            card.dataset.matchKey =
+                [
+                    p.house.roof,
+                    p.house.body,
+                    p.house.door
+                ].join("|");
+
+            card.innerHTML =
+                houseSVG(
+                    p.house
+                );
+
+            addDragEvents(
+                card
+            );
+
+            housesColumn.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    /*
+       Buat kartu pasangan.
+       Posisi kartu diacak.
+    */
+
+    shuffle(data).forEach(
+        p => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "shape-card";
+
+            card.id =
+                "shape-" + p.id;
+
+            card.dataset.setId =
+                p.id;
+
+            card.dataset.matchKey =
+                [
+                    p.house.roof,
+                    p.house.body,
+                    p.house.door
+                ].join("|");
+
+            card.innerHTML =
+                shapeCardHTML(
+                    p
+                );
+
+            card.addEventListener(
+                "dragover",
+                onDragOver
+            );
+
+            card.addEventListener(
+                "dragleave",
+                onDragLeave
+            );
+
+            card.addEventListener(
+                "drop",
+                onDrop
+            );
+
+            shapesColumn.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    /*
+       Pesan pembuka.
+    */
+
+    setTimeout(
+        () => {
+
+            if (level === 1) {
+
+                speak(
+                    "Ayo cocokkan warna atap, badan dan pintu."
+                );
+
+            }
+            else {
+
+                speak(
+                    "Level " +
+                    level +
+                    ". Perhatikan ketiga bentuk dan warnanya."
+                );
+
+            }
+
+        },
+        400
+    );
+
+}
+
+
+/* =====================================================
+   DRAG EVENTS
+===================================================== */
+
+function addDragEvents(el) {
+
+    el.addEventListener(
+        "dragstart",
+        onDragStart
+    );
+
+    el.addEventListener(
+        "dragend",
+        onDragEnd
+    );
+
+    el.addEventListener(
+        "touchstart",
+        onTouchStart,
+        {
+            passive: false
+        }
+    );
+
+    el.addEventListener(
+        "touchmove",
+        onTouchMove,
+        {
+            passive: false
+        }
+    );
+
+    el.addEventListener(
+        "touchend",
+        onTouchEnd,
+        {
+            passive: false
+        }
+    );
+
+}
+
+
+/* =====================================================
+   DRAG START
+===================================================== */
+
+function onDragStart(e) {
+
+    if (
+        this.classList.contains(
+            "matched"
+        )
+    ) {
+
+        e.preventDefault();
+
+        return;
+
+    }
+
+    draggedEl =
+        this;
+
+    this.classList.add(
+        "dragging"
+    );
+
+    playClickSound();
+
+    e.dataTransfer.effectAllowed =
+        "move";
+
+    e.dataTransfer.setData(
+        "text/plain",
+        this.id
+    );
+
+}
+
+
+/* =====================================================
+   DRAG END
+===================================================== */
+
+function onDragEnd() {
+
+    this.classList.remove(
+        "dragging"
+    );
+
+    draggedEl =
+        null;
+
+}
+
+
+/* =====================================================
+   DRAG OVER
+===================================================== */
+
+function onDragOver(e) {
+
+    e.preventDefault();
+
+    e.dataTransfer.dropEffect =
+        "move";
+
+    this.classList.add(
+        "drag-over"
+    );
+
+}
+
+
+/* =====================================================
+   DRAG LEAVE
+===================================================== */
+
+function onDragLeave() {
+
+    this.classList.remove(
+        "drag-over"
+    );
+
+}
+
+
+/* =====================================================
+   DROP
+===================================================== */
+
+function onDrop(e) {
+
+    e.preventDefault();
+
+    this.classList.remove(
+        "drag-over"
+    );
+
+    const id =
+        e.dataTransfer.getData(
+            "text/plain"
+        );
+
+    const house =
+        document.getElementById(
+            id
+        );
+
+    if (
+        house &&
+        !house.classList.contains(
+            "matched"
+        )
+    ) {
+
+        checkMatch(
+            house,
+            this
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   TOUCH START
+===================================================== */
+
+function onTouchStart(e) {
+
+    if (
+        this.classList.contains(
+            "matched"
+        )
+    ) {
+
+        return;
+
+    }
+
+    e.preventDefault();
+
+    const touch =
+        e.touches[0];
+
+    const rect =
+        this.getBoundingClientRect();
+
+    touchOffX =
+        touch.clientX -
+        rect.left;
+
+    touchOffY =
+        touch.clientY -
+        rect.top;
+
+    draggedEl =
+        this;
+
+    this.classList.add(
+        "dragging"
+    );
+
+    playClickSound();
+
+    touchClone =
+        this.cloneNode(true);
+
+    Object.assign(
+        touchClone.style,
+        {
+
+            position: "fixed",
+
+            zIndex: "10000",
+
+            pointerEvents: "none",
+
+            opacity: ".85",
+
+            width:
+                rect.width + "px",
+
+            height:
+                rect.height + "px",
+
+            transition: "none"
+
+        }
+    );
+
+    document.body.appendChild(
+        touchClone
+    );
+
+    moveClone(
+        touch.clientX,
+        touch.clientY
+    );
+
+}
+
+
+/* =====================================================
+   TOUCH MOVE
+===================================================== */
+
+function onTouchMove(e) {
+
+    if (
+        !draggedEl ||
+        !touchClone
+    ) {
+
+        return;
+
+    }
+
+    e.preventDefault();
+
+    const touch =
+        e.touches[0];
+
+    moveClone(
+        touch.clientX,
+        touch.clientY
+    );
+
+
+    document
+        .querySelectorAll(
+            ".shape-card"
+        )
+        .forEach(
+            card => {
+
+                card.classList.remove(
+                    "drag-over"
+                );
+
+                const r =
+                    card.getBoundingClientRect();
+
+                if (
+
+                    touch.clientX >= r.left &&
+                    touch.clientX <= r.right &&
+                    touch.clientY >= r.top &&
+                    touch.clientY <= r.bottom
+
+                ) {
+
+                    card.classList.add(
+                        "drag-over"
+                    );
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   TOUCH END
+===================================================== */
+
+function onTouchEnd(e) {
+
+    if (!draggedEl)
+        return;
+
+    const touch =
+        e.changedTouches[0];
+
+    let target =
+        null;
+
+
+    document
+        .querySelectorAll(
+            ".shape-card"
+        )
+        .forEach(
+            card => {
+
+                card.classList.remove(
+                    "drag-over"
+                );
+
+                const r =
+                    card.getBoundingClientRect();
+
+                if (
+
+                    touch.clientX >= r.left &&
+                    touch.clientX <= r.right &&
+                    touch.clientY >= r.top &&
+                    touch.clientY <= r.bottom
+
+                ) {
+
+                    target =
+                        card;
+
+                }
+
+            }
+        );
+
+
+    if (touchClone) {
+
+        touchClone.remove();
+
+        touchClone =
+            null;
+
+    }
+
+
+    draggedEl.classList.remove(
+        "dragging"
+    );
+
+
+    if (
+        target &&
+        !draggedEl.classList.contains(
+            "matched"
+        )
+    ) {
+
+        checkMatch(
+            draggedEl,
+            target
+        );
+
+    }
+
+
+    draggedEl =
+        null;
+
+}
+
+
+/* =====================================================
+   MOVE CLONE
+===================================================== */
+
+function moveClone(x, y) {
+
+    if (!touchClone)
+        return;
+
+    touchClone.style.left =
+        (
+            x - touchOffX
+        ) + "px";
+
+    touchClone.style.top =
+        (
+            y - touchOffY
+        ) + "px";
+
+}
+
+
+/* =====================================================
+   CEK MATCH
+=====================================================
+
+   Dua hal harus sama:
+
+   1. ID pasangan
+   2. Kombinasi warna
+
+   Jadi hubungan tidak hanya berdasarkan
+   posisi kartu.
+
+===================================================== */
+
+function checkMatch(
+    houseEl,
+    shapeEl
+) {
+
+    const houseId =
+        houseEl.dataset.houseId;
+
+    const shapeId =
+        shapeEl.dataset.setId;
+
+    const houseKey =
+        houseEl.dataset.matchKey;
+
+    const shapeKey =
+        shapeEl.dataset.matchKey;
+
+
+    /*
+       HARUS:
+       ID sama DAN
+       kombinasi warna sama.
+    */
+
+    const correct =
+        houseId === shapeId &&
+        houseKey === shapeKey;
+
+
+    if (correct) {
+
+        /* =============================================
+           BENAR
+        ============================================== */
+
+        playCorrectSound();
+
+        speak(
+            "Benar! Hebat sekali!"
+        );
+
+        houseEl.classList.add(
+            "matched"
+        );
+
+        shapeEl.classList.add(
+            "matched"
+        );
+
+        houseEl.draggable =
+            false;
+
+        matchedPairs.add(
+            houseId
+        );
+
+        score++;
+
+        updateScore();
+
+        showFeedback(
+            "✅ BENAR!",
+            "correct"
+        );
+
+        drawConnector(
+            houseEl,
+            shapeEl
+        );
+
+        miniConfetti(
+            shapeEl
+        );
+
+
+        /*
+           Semua selesai.
+        */
+
+        if (
+            score >= totalPairs
+        ) {
+
+            setTimeout(
+                () => {
+
+                    playWinSound();
+
+                    speak(
+                        level < 10
+
+                        ? "Hebat! Semua pasangan benar!"
+
+                        : "Selamat! Semua level berhasil diselesaikan!"
+                    );
+
+                    document
+                        .getElementById(
+                            "winModal"
+                        )
+                        .classList.add(
+                            "show"
+                        );
+
+
+                    document.getElementById(
+                        "winLevelText"
+                    ).textContent =
+
+                        level < 10
+
+                        ? `Siap naik ke Level ${level + 1}!`
+
+                        : "Kamu berhasil menyelesaikan 10 level! 🎉";
+
+
+                    document.getElementById(
+                        "nextButtonText"
+                    ).textContent =
+
+                        level < 10
+
+                        ? "Level Berikutnya!"
+
+                        : "Main Lagi";
+
+
+                    bigConfetti();
+
+                },
+                900
+            );
+
+        }
+
+    }
+
+    else {
+
+        /* =============================================
+           SALAH
+        ============================================== */
+
+        playWrongSound();
+
+        speak(
+            "Belum tepat, coba lagi!"
+        );
+
+        houseEl.classList.add(
+            "wrong"
+        );
+
+        shapeEl.classList.add(
+            "wrong"
+        );
+
+        showFeedback(
+            "❌ COBA LAGI!",
+            "wrong"
+        );
+
+
+        setTimeout(
+            () => {
+
+                houseEl.classList.remove(
+                    "wrong"
+                );
+
+                shapeEl.classList.remove(
+                    "wrong"
+                );
+
+            },
+            600
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   UPDATE SCORE
+===================================================== */
+
+function updateScore() {
+
+    document.getElementById(
+        "score"
+    ).textContent =
+        score;
+
+    const percentage =
+        (
+            score /
+            totalPairs
+        ) * 100;
+
+    const fill =
+        document.getElementById(
+            "progressFill"
+        );
+
+    fill.style.width =
+        percentage + "%";
+
+    fill.textContent =
+        Math.round(
+            percentage
+        ) + "%";
+
+}
+
+
+/* =====================================================
+   FEEDBACK
+===================================================== */
+
+function showFeedback(
+    text,
+    type
+) {
+
+    const overlay =
+        document.getElementById(
+            "feedbackOverlay"
+        );
+
+    const textEl =
+        document.getElementById(
+            "feedbackText"
+        );
+
+    textEl.textContent =
+        text;
+
+    textEl.className =
+        "feedback-text " +
+        (
+            type === "correct"
+            ? "feedback-correct"
+            : "feedback-wrong"
+        );
+
+    overlay.classList.add(
+        "show"
+    );
+
+    setTimeout(
+        () => {
+
+            overlay.classList.remove(
+                "show"
+            );
+
+        },
+        900
+    );
+
+}
+
+
+/* =====================================================
+   CONNECTOR
+===================================================== */
+
+function drawConnector(
+    houseEl,
+    shapeEl
+) {
+
+    const svg =
+        document.getElementById(
+            "connectorSvg"
+        );
+
+    const board =
+        document
+            .getElementById(
+                "gameBoard"
+            )
+            .getBoundingClientRect();
+
+    const hr =
+        houseEl.getBoundingClientRect();
+
+    const sr =
+        shapeEl.getBoundingClientRect();
+
+    const x1 =
+        hr.right -
+        board.left;
+
+    const y1 =
+        hr.top +
+        hr.height / 2 -
+        board.top;
+
+    const x2 =
+        sr.left -
+        board.left;
+
+    const y2 =
+        sr.top +
+        sr.height / 2 -
+        board.top;
+
+    const middle =
+        (
+            x1 + x2
+        ) / 2;
+
+    const path =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "path"
+        );
+
+    path.setAttribute(
+        "d",
+        `
+            M ${x1} ${y1}
+            C ${middle} ${y1},
+              ${middle} ${y2},
+              ${x2} ${y2}
+        `
+    );
+
+    path.setAttribute(
+        "class",
+        "connector-line"
+    );
+
+    svg.appendChild(
+        path
+    );
+
+}
+
+
+/* =====================================================
+   CONFETTI
+===================================================== */
+
+function spawnConfetti(
+    count,
+    container,
+    center,
+    minDuration,
+    maxDuration
+) {
+
+    const colors = [
+
+        "#f44336",
+        "#4caf50",
+        "#2196f3",
+        "#ff9800",
+        "#9c27b0",
+        "#ffeb3b",
+        "#e91e63",
+        "#00bcd4"
+
+    ];
+
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        const piece =
+            document.createElement(
+                "div"
+            );
+
+        piece.className =
+            "confetti-piece";
+
+
+        const size =
+            7 +
+            Math.random() * 10;
+
+
+        let left;
+
+
+        if (
+            center !== undefined
+        ) {
+
+            /*
+               center berupa pixel.
+            */
+
+            left =
+                center +
+                (
+                    Math.random() -
+                    .5
+                ) * 150;
+
+        }
+        else {
+
+            left =
+                Math.random() *
+                window.innerWidth;
+
+        }
+
+
+        Object.assign(
+            piece.style,
+            {
+
+                background:
+                    colors[
+                        Math.floor(
+                            Math.random() *
+                            colors.length
+                        )
+                    ],
+
+                width:
+                    size + "px",
+
+                height:
+                    size + "px",
+
+                borderRadius:
+                    Math.random() > .5
+                    ? "50%"
+                    : "3px",
+
+                left:
+                    left + "px",
+
+                animationDuration:
+                    (
+                        minDuration +
+                        Math.random() *
+                        (
+                            maxDuration -
+                            minDuration
+                        )
+                    ) + "s",
+
+                animationDelay:
+                    (
+                        Math.random() *
+                        .4
+                    ) + "s"
+
+            }
+        );
+
+
+        container.appendChild(
+            piece
+        );
+
+
+        setTimeout(
+            () => {
+                piece.remove();
+            },
+            4500
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CONFETTI KECIL
+===================================================== */
+
+function miniConfetti(el) {
+
+    const rect =
+        el.getBoundingClientRect();
+
+    spawnConfetti(
+
+        18,
+
+        document.getElementById(
+            "confettiContainer"
+        ),
+
+        rect.left +
+        rect.width / 2,
+
+        1.5,
+
+        2.8
+
+    );
+
+}
+
+
+/* =====================================================
+   CONFETTI BESAR
+===================================================== */
+
+function bigConfetti() {
+
+    spawnConfetti(
+
+        120,
+
+        document.getElementById(
+            "confettiContainer"
+        ),
+
+        undefined,
+
+        2,
+
+        4
+
+    );
+
+}
+
+
+/* =====================================================
+   LEVEL BERIKUTNYA
+===================================================== */
+
+function nextLevel() {
+
+    playClickSound();
+
+    document
+        .getElementById(
+            "winModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+
+    if (
+        level < 10
+    ) {
+
+        level++;
+
+    }
+    else {
+
+        level = 1;
+
+    }
+
+
+    initGame();
+
+}
+
+
+/* =====================================================
+   START GAME
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        initGame();
+
+
+        const initializeAudio =
+            () => {
+
+                initAudio();
+
+                if (
+                    audioCtx &&
+                    audioCtx.state ===
+                    "suspended"
+                ) {
+
+                    audioCtx.resume();
+
+                }
+
+
+                document.removeEventListener(
+                    "click",
+                    initializeAudio
+                );
+
+                document.removeEventListener(
+                    "touchstart",
+                    initializeAudio
+                );
+
+            };
+
+
+        document.addEventListener(
+            "click",
+            initializeAudio
+        );
+
+
+        document.addEventListener(
+            "touchstart",
+            initializeAudio
+        );
+
+    }
+);
+
+</script>
+
+</body>
+</html>
